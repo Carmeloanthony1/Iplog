@@ -13,7 +13,7 @@ const server = http.createServer( (request, respond) => {
     bikin hosting send ke jembatan itu terus send ke catatant.txt
     */
     const time = new Date().toLocaleString(); //inisialisasi nanti biar kita bisa cetak waktunya juga
-    ip2location.lookup(target, (err, data) => {
+    ip2location.lookup(target, ' ', (err, data) => {
         let lokasi = "gagal melacak";
         if(!err && data.city_name){
             lokasi = `${data.city_name}, ${data.country_name} (${data.as})`;
