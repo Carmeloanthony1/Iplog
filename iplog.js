@@ -4,7 +4,7 @@ const fs = require('fs'); //kayak file processing di bahasa c
 const {Configuration, IPGeolocation} = require('ip2location-io-nodejs');
 
 const config = new Configuration(process.env.API_ip2location);
-const ip2location = IPGeolocation;
+const ip2location = new IPGeolocation;
 const server = http.createServer( (request, respond) => {
 
     const target = request.headers['x-forwarded-for'] || request.socket.remoteAddress; 
@@ -20,7 +20,7 @@ const server = http.createServer( (request, respond) => {
         }
 
         const catatan = `[${time}] IP: ${target}, Lokasi: ${lokasi}\n`;
-        fs.appendfile('catatan.txt', catatan, (err)=>{
+        fs.appendFile('catatan.txt', catatan, (err)=>{
             if (!err) console.log(`Log tersimpan : ${target}`);
         });
     });
@@ -60,6 +60,13 @@ const server = http.createServer( (request, respond) => {
         </html>
         `);
 });
-server.listen(3000, () => {
+
+module.exports = server; //deploy server di serahin ke hosting -> saat ini vercel
+if(require.main === module){ 
+    /*biar bisa di jalanin secara lokal juga, 
+    kalau dijalankan dengan vercel -> nilainya false kondisi tidak dijalankan
+    kalau dijalankan seecara lokal -> nilainya true kondisi dijalankan*/
+    server.listen(3000, () => { 
     console.log("Server nyala!");
-});
+    });
+}
