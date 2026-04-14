@@ -1,4 +1,3 @@
-require('dotenv').config();
 const http = require('http'); //library untuk web server
 const {Configuration, IPGeolocation} = require('ip2location-io-nodejs');
 const {google} = require('googleapis');
