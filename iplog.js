@@ -1,9 +1,5 @@
 const http = require('http'); //library untuk web server
-const {Configuration, IPGeolocation} = require('ip2location-io-nodejs');
 const {google} = require('googleapis');
-
-const config = new Configuration(process.env.API_ip2location);
-const ip2location = new IPGeolocation(config);
 
 const auth = new google.auth.GoogleAuth({
     credentials: {
@@ -14,16 +10,16 @@ const auth = new google.auth.GoogleAuth({
 });
 
 const sheets = google.sheets({version: 'v4', auth});
-const cariIP = (target)=> {
-    return new Promise((resolve)=>
-    {
-        const timer = setTimeout(()=> resolve(null), 5000);
-        ip2location.lookup(target, (err, data)=> {
-            clearTimeout(timer);
-            if(!err && data?.city_name) resolve(data);
-            else resolve(null);
-        });
-    });
+const cariIP = async (target) => {
+    try {
+        const response = await fetch(`https://api.ip2location.io/?key=${process.env.API_ip2location}&ip=${target}`);
+        if (!response.ok) return null;
+        const data = await response.json();
+        return data;
+    } catch (error){
+        console.error("Gagal ambil IP", error.message);
+        return null;
+    } 
 };
 
 const printsheet = async (data)=> {
@@ -76,8 +72,6 @@ const handler =  async(request, respond) => {
     bikin hosting send ke jembatan itu terus send ke catatant.txt
     */
     const time = new Date().toLocaleString('id-ID'); //inisialisasi nanti biar kita bisa cetak waktunya juga
-    respond.writeHead(404, {'Content-Type': 'text/html'}); //respon masuk ke web html
-    respond.end(html);
     try {
         const data = await cariIP(target);
         const kota = data ? `${data.city_name}, ${data.country_name}` : 'gagal melacak';
@@ -87,6 +81,8 @@ const handler =  async(request, respond) => {
     } catch(e){
         console.error('Error:', e.message);
     }
+    respond.writeHead(404, {'Content-Type': 'text/html'}); //respon masuk ke web html
+    respond.end(html);
 };
 module.exports = handler; //deploy server di serahin ke hosting -> saat ini vercel
 if(require.main === module){ 
