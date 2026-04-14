@@ -10,7 +10,7 @@ const ip2location = new IPGeolocation(config);
 const auth = new google.auth.GoogleAuth({
     credentials: {
         client_email: process.env.Google_sheet_email,
-        private_key: process.env.Google_private_key.replace(/\\n/g, '\n'),     
+        private_key: process.env.Google_privatekey.replace(/\\n/g, '\n'),     
     },
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
