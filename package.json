@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "ip2location-io-nodejs": "^1.1.1"
+  }
+}

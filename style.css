@@ -1,0 +1,10 @@
+body {
+    background-color: aliceblue;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color :black;
+    display : flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height : 100vh;
+}
