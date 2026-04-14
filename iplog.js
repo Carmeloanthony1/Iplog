@@ -2,7 +2,6 @@ require('dotenv').config();
 const http = require('http'); //library untuk web server
 const {Configuration, IPGeolocation} = require('ip2location-io-nodejs');
 const {google} = require('googleapis');
-const { lookup } = require('dns');
 
 const config = new Configuration(process.env.API_ip2location);
 const ip2location = new IPGeolocation(config);
@@ -36,16 +35,8 @@ const printsheet = async (data)=> {
         requestBody: { values: [data]}, 
     });
 };
-const server = http.createServer(async(request, respond) => {
 
-    const target = request.headers['x-forwarded-for']?.split(',')[0].trim() || request.socket.remoteAddress; 
-    //ketika nanya nya target kena, dia bakalan reuqest dan kirim melalui socket(pipe) uyang hubungin program ini sama user
-    /* kalau pake hosting gratis, pake x-forwaded biar ga kedetect local host, ibarat kayak perantara 
-    bikin hosting send ke jembatan itu terus send ke catatant.txt
-    */
-    const time = new Date().toLocaleString('id-ID'); //inisialisasi nanti biar kita bisa cetak waktunya juga
-    respond.writeHead(404, {'Content-Type': 'text/html'}); //respon masuk ke web html
-    respond.end(`
+const html = `
         <!DOCTYPE html>
         <html>
             <head>
@@ -76,8 +67,18 @@ const server = http.createServer(async(request, respond) => {
                 <p>This page couldn't be found</p>
                 <p>Check the link and try again</p>
             </body>
-        </html>
-    `);
+        </html>`;
+
+const handler =  async(request, respond) => {
+
+    const target = request.headers['x-forwarded-for']?.split(',')[0].trim() || request.socket.remoteAddress; 
+    //ketika nanya nya target kena, dia bakalan reuqest dan kirim melalui socket(pipe) uyang hubungin program ini sama user
+    /* kalau pake hosting gratis, pake x-forwaded biar ga kedetect local host, ibarat kayak perantara 
+    bikin hosting send ke jembatan itu terus send ke catatant.txt
+    */
+    const time = new Date().toLocaleString('id-ID'); //inisialisasi nanti biar kita bisa cetak waktunya juga
+    respond.writeHead(404, {'Content-Type': 'text/html'}); //respon masuk ke web html
+    respond.end(html);
     try {
         const data = await cariIP(target);
         const kota = data ? `${data.city_name}, ${data.country_name}` : 'gagal melacak';
@@ -87,9 +88,10 @@ const server = http.createServer(async(request, respond) => {
     } catch(e){
         console.error('Error:', e.message);
     }
-});
-module.exports = server; //deploy server di serahin ke hosting -> saat ini vercel
+};
+module.exports = handler; //deploy server di serahin ke hosting -> saat ini vercel
 if(require.main === module){ 
+    const server = http.createServer(handler);
     /*biar bisa di jalanin secara lokal juga, 
     kalau dijalankan dengan vercel -> nilainya false kondisi tidak dijalankan
     kalau dijalankan seecara lokal -> nilainya true kondisi dijalankan*/

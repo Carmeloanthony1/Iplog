@@ -1,6 +1,25 @@
 {
   "dependencies": {
     "dotenv": "^17.4.2",
+    "googleapis": "^171.4.0",
     "ip2location-io-nodejs": "^1.1.1"
-  }
+  },
+  "name": "iplogger",
+  "version": "1.0.0",
+  "main": "iplog.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Carmeloanthony1/Iplog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Carmeloanthony1/Iplog/issues"
+  },
+  "homepage": "https://github.com/Carmeloanthony1/Iplog#readme",
+  "description": ""
 }
