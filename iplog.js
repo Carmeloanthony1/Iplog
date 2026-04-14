@@ -22,43 +22,42 @@ const server = http.createServer( (request, respond) => {
         const catatan = `[${time}] IP: ${target}, Lokasi: ${lokasi}\n`;
         fs.appendFile('catatan.txt', catatan, (err)=>{
             if (!err) console.log(`Log tersimpan : ${target}`);
+            respond.writeHead(404, {'Content-Type': 'text/html'}); //respon masuk ke web html
+            respond.end(`
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <title>404 not found</title>
+                        <style> 
+                        body {
+                            background-color: aliceblue;
+                            font-family: Georgia, 'Times New Roman', Times, serif;
+                            color :black;
+                            display : flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            height : 100vh;
+                            overflow : hidden;
+                            margin : 0;
+                        }
+                
+                        h1, p { 
+                            margin : 0;
+                            font-size: 2.5em;
+                            padding : 2px 0;
+                        }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>404 not found</h1>
+                        <p>This page couldn't be found</p>
+                        <p>Check the link and try again</p>
+                    </body>
+                </html>
+            `);
         });
     });
-
-    respond.writeHead(404, {'Content-Type': 'text/html'}); //respon masuk ke web html
-    respond.end(`
-        <!DOCTYPE html>
-        <html>
-            <head>
-                <title>404 not found</title>
-                <style> 
-                body {
-                    background-color: aliceblue;
-                    font-family: Georgia, 'Times New Roman', Times, serif;
-                    color :black;
-                    display : flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    height : 100vh;
-                    overflow : hidden;
-                    margin : 0;
-                }
-                
-                h1, p { 
-                    margin : 0;
-                    font-size: 2.5em;
-                    padding : 2px 0;
-                }
-                </style>
-            </head>
-            <body>
-                <h1>404 not found</h1>
-                <p>This page couldn't be found</p>
-                <p>Check the link and try again</p>
-            </body>
-        </html>
-        `);
 });
 
 module.exports = server; //deploy server di serahin ke hosting -> saat ini vercel
