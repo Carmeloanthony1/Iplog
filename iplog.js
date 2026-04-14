@@ -4,7 +4,7 @@ const fs = require('fs'); //kayak file processing di bahasa c
 const {Configuration, IPGeolocation} = require('ip2location-io-nodejs');
 
 const config = new Configuration(process.env.API_ip2location);
-const ip2location = new IPGeolocation;
+const ip2location = new IPGeolocation(config);
 const server = http.createServer( (request, respond) => {
 
     const target = request.headers['x-forwarded-for'] || request.socket.remoteAddress; 

@@ -5,8 +5,8 @@
         "use": "@vercel/node"
     }
     ],
-    "route" : [{
-        "src":"/(*.)",
+    "routes" : [{
+        "src":"/(.*)",
         "dest": "iplog.js"    
     }]
 }
