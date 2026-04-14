@@ -19,7 +19,7 @@ const cariIP = (target)=> {
     return new Promise((resolve)=>
     {
         const timer = setTimeout(()=> resolve(null), 5000);
-        ip2location.lookup(target, 'en', (err, data)=> {
+        ip2location.lookup(target, (err, data)=> {
             clearTimeout(timer);
             if(!err && data?.city_name) resolve(data);
             else resolve(null);
